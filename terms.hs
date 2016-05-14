@@ -1,176 +1,18 @@
 {-# LANGUAGE FlexibleInstances #-}
+module Asistente_pruebas where
 
-data Term = T
-		  | F
-		  | Var String
-		  | Not Term 
-		  | Or Term Term 
-		  | And Term Term 
-		  | Impl Term Term 
-		  | Iff Term Term 
-		  | Niff Term Term
+import Term
+import Equation	
+import Theorems
 
-
-(\/) :: Term -> Term -> Term
-(\/) t1 t2 = Or t1 t2
-
-(/\) :: Term -> Term -> Term
-(/\) t1 t2 = And t1 t2
-
-(==>) :: Term -> Term -> Term
-(==>) t1 t2 = Impl t1 t2
-
-(<==>) :: Term -> Term -> Term
-(<==>) t1 t2 = Iff t1 t2
-
-(!<==>) :: Term -> Term -> Term
-(!<==>) t1 t2 = Niff t1 t2
-
-showTerm :: Term -> String
-
-showTerm (Var i) = id i
-
-showTerm (Not (Var i)) = "!" ++ showTerm t
-showTerm (Not T) = "!" ++ showTerm T
-showTerm (Not F) = "!" ++ showTerm F
-showTerm (Not t) = "!(" ++ showTerm t ++ ")"
-
-showTerm T = "true"
-showTerm F = "false"
-
-showTerm (Or (Var i) (Var j)) = showTerm(Var i) ++ " \\/ " ++ showTerm(Var j)
-showTerm (Or (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
-showTerm (Or t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i)
-showTerm (Or t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
-
-showTerm (And (Var i) (Var j)) = showTerm(Var i) ++ " /\\ " ++ showTerm(Var j)
-showTerm (And (Var i) t) = showTerm(Var i) ++ " /\\ (" ++ showTerm(t) ++ ")"
-showTerm (And t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " /\\ " ++ showTerm(Var i)
-showTerm (And t1 t2) = "(" ++ showTerm t1 ++ ") /\\ (" ++ showTerm t2 ++ ")"
-
-showTerm (Impl (Var i) (Var j)) = showTerm(Var i) ++ " ==> " ++ showTerm(Var j)
-showTerm (Impl (Var i) t) = showTerm(Var i) ++ " ==> (" ++ showTerm(t) ++ ")"
-showTerm (Impl t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " ==> " ++ showTerm(Var i)
-showTerm (Impl t1 t2) = "(" ++ showTerm t1 ++ ") ==> (" ++ showTerm t2 ++ ")"
-
-showTerm (Iff (Var i) (Var j)) = showTerm(Var i) ++ " <==> " ++ showTerm(Var j)
-showTerm (Iff (Var i) t) = showTerm(Var i) ++ " <==> (" ++ showTerm(t) ++ ")"
-showTerm (Iff t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " <==> " ++ showTerm(Var i)
-showTerm (Iff t1 t2) = "(" ++ showTerm t1 ++ ") <==> (" ++ showTerm t2 ++ ")"
-
-showTerm (Niff (Var i) (Var j)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Var j)
-showTerm (Niff (Var i) t) = showTerm(Var i) ++ " !<==> (" ++ showTerm(t) ++ ")"
-showTerm (Niff t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " !<==> " ++ showTerm(Var i)
-showTerm (Niff t1 t2) = "(" ++ showTerm t1 ++ ") !<==> (" ++ showTerm t2 ++ ")"
-
-instance Show Term where show = showTerm
-
-a :: Term
-a = Var "a"
-
-b :: Term
-b = Var "b"
-
-c :: Term
-c = Var "c"
-
-d :: Term
-d = Var "d"
-
-e :: Term
-e = Var "e"
-
-f :: Term
-f = Var "f"
-
-g :: Term
-g = Var "g"
-
-h :: Term
-h = Var "h"
-
-i :: Term
-i = Var "i"
-
-j :: Term
-j = Var "j"
-
-k :: Term
-k = Var "k"
-
-l :: Term
-l = Var "l"
-
-m :: Term
-m = Var "m"
-
-n :: Term
-n = Var "n"
-
-o :: Term
-o = Var "o"
-
-p :: Term
-p = Var "p"
-
-q :: Term
-q = Var "q"
-
-r :: Term
-r = Var "r"
-
-s :: Term
-s = Var "s"
-
-t :: Term
-t = Var "t"
-
-u :: Term
-u = Var "u"
-
-v :: Term
-v = Var "v"
-
-w :: Term
-w = Var "w"
-
-x :: Term
-x = Var "x"
-
-y :: Term
-y = Var "y"
-
-z :: Term
-z = Var "z"
-
-data Equation = Equation Term Term
-
-instance Eq Term where
-	Var t1 == Var t2 = t1 == t2
-	T == T = True
-	F == F = True
-	(Or t1 t2) == (Or t3 t4) = (t1 == t3) && (t2 == t4)
-	(And t1 t2) == (And t3 t4) = (t1 == t3) && (t2 == t4)
-	(Impl t1 t2) == (Impl t3 t4) = (t1 == t3) && (t2 == t4)
-	(Iff t1 t2) == (Iff t3 t4) = (t1 == t3) && (t2 == t4)
-	(Niff t1 t2) == (Niff t3 t4) = (t1 == t3) && (t2 == t4)
-	(Not t1) == (Not t2) = t1 == t2
-	_ == _ = False
-
-instance Eq Equation where
-	Equation t1 t2 == Equation t3 t4
-		| t1 == t3 && t2 == t4 = True
-		| t1 == t4 && t2 == t3 = True
-		| otherwise = False
-
-instance Show Equation where
-	show (Equation t1 t2) = show t1 ++ " === " ++ show t2
 
 -- Asumimos que la entrada es correcta
 data Sust = Sust Term Term
 
--- Abstraer de Flaviani
+(=:) :: Term -> Term -> Sust
+(=:) t1 s1 = Sust t1 s1
 
+-- Abstraer de Flaviani
 ci = \x -> x
 ck = \x -> \y -> x
 cs = \x -> \y -> \z -> (x z) (y z)
@@ -184,7 +26,6 @@ abstraer (Var x) (Iff t1 t2) = cs (cs (ck Iff) (abstraer (Var x) t1)) (abstraer 
 abstraer (Var x) (Niff t1 t2) = cs (cs (ck Niff) (abstraer (Var x) t1)) (abstraer (Var x) t2)
 
 abstraer (Or t1 t2) _ = error "Solo se puede abstraer una variable"
-
 
 class Instantiable s where
 	sustituir :: Term -> s -> Term
@@ -211,3 +52,39 @@ instance Instantiable (Term, Sust, Term) where
 		| (Var v1) == s1 = (abstraer (Var v1) (Var v1)) t1
 		| (Var v1) == s2 = (abstraer (Var v1) (Var v1)) t2
 		| otherwise = Var v1
+
+instance Instantiable (Term, Term, Sust, Term, Term) where
+	sustVar (Var v1) (t1, t2, Sust t3 s1, s2, s3)
+		| (Var v1) == s1 = (abstraer (Var v1) (Var v1)) t1
+		| (Var v1) == s2 = (abstraer (Var v1) (Var v1)) t2
+		| (Var v1) == s3 = (abstraer (Var v1) (Var v1)) t3
+		| otherwise = Var v1
+
+leibniz :: Equation -> Term -> Term -> Equation
+leibniz (Equation e1 e2) tz (Var z) = Equation (sustituir tz (Sust e1 (Var z))) (sustituir tz (Sust e2 (Var z))) 
+
+infer :: (Instantiable s) => Float -> s -> Term -> Term -> Equation
+infer n sus (Var z) tz = leibniz (instantiate (prop n) sus) tz (Var z)
+
+step :: (Instantiable s) => Float -> s -> Term -> Term -> Term -> Term
+step n sus (Var z) tz tini
+	| tini == e1 = e2
+	| tini == e2 = e1
+	| otherwise = error "Invalid inference rule"
+	where Equation e1 e2 = infer n sus (Var z) tz
+
+proof :: Equation -> IO Term
+proof (Equation e1 e2) = print e1 >>= \_ -> return e1
+
+done :: Term -> Equation -> IO Bool
+done tfin (Equation e1 e2)
+	| e2 == tfin = putStrLn "proof successful" >>= \_ -> return True
+	| otherwise = putStrLn "uncomplete proof" >>= \_ -> return False
+
+-- Funciones dummy --
+with = id
+using = id
+lambda = id
+
+statement :: (Instantiable s) => Term -> Float -> s -> Term -> Term -> IO Term
+statement tini n sus (Var z) tz = return (step n sus (Var z) tz tini)
