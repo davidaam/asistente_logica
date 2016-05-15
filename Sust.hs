@@ -9,24 +9,19 @@ data Sust = Sust Term Term
 (=:) :: Term -> Term -> Sust
 (=:) t1 s1 = Sust t1 s1
 
+infixr 1 =:
+
 class (Show s) => Instantiable s where
     sustituir :: Term -> s -> Term
     sustVar :: Term -> s -> Term
     instantiate :: Equation -> s -> Equation
     instantiate (Equation t1 t2) sus = Equation (sustituir t1 sus) (sustituir t2 sus)
 
-    -- Casos recursivos
-    sustituir (Or t1 t2) sus = Or (sustituir t1 sus) (sustituir t2 sus)
-    sustituir (And t1 t2) sus = And (sustituir t1 sus) (sustituir t2 sus)
-    sustituir (Impl t1 t2) sus = Impl (sustituir t1 sus) (sustituir t2 sus)
-    sustituir (Iff t1 t2) sus = Iff (sustituir t1 sus) (sustituir t2 sus)
-    sustituir (Niff t1 t2) sus = Niff (sustituir t1 sus) (sustituir t2 sus)
-    sustituir (Not t) sus = Not (sustituir t sus)
-
-    -- Casos base
     sustituir T _ = T
     sustituir F _ = F
     sustituir (Var v1) sus = sustVar (Var v1) sus
+    sustituir (Op operador t1 t2) sus = Op operador (sustituir t1 sus) (sustituir t2 sus)
+
 
 instance Instantiable Sust where
     sustVar (Var v1) (Sust sustitucion variable)

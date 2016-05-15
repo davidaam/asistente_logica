@@ -1,14 +1,19 @@
 module Term where
 
+data OpBin = Or | And | Impl | Iff | Niff
+
+instance Show OpBin where
+  show Or = "\\/"
+  show And = "/\\"
+  show Impl = "==>"
+  show Iff = "<==>"
+  show Niff = "!<==>"
+
 data Term = T
           | F
           | Var String
-          | Not Term 
-          | Or Term Term 
-          | And Term Term 
-          | Impl Term Term 
-          | Iff Term Term 
-          | Niff Term Term
+          | Not Term
+          | Op OpBin Term Term
 
 instance Show Term where show = showTerm
 
@@ -16,31 +21,26 @@ instance Eq Term where
     Var t1 == Var t2 = t1 == t2
     T == T = True
     F == F = True
-    (Or t1 t2) == (Or t3 t4) = (t1 == t3) && (t2 == t4)
-    (And t1 t2) == (And t3 t4) = (t1 == t3) && (t2 == t4)
-    (Impl t1 t2) == (Impl t3 t4) = (t1 == t3) && (t2 == t4)
-    (Iff t1 t2) == (Iff t3 t4) = (t1 == t3) && (t2 == t4)
-    (Niff t1 t2) == (Niff t3 t4) = (t1 == t3) && (t2 == t4)
-    (Not t1) == (Not t2) = t1 == t2
+    (Op operador1 t1 t2) == (Op operador2 t3 t4) = (t1 == t3) && (t2 == t4)
     _ == _ = False
 
 neg :: Term -> Term
 neg t = Not t
 
 (\/) :: Term -> Term -> Term
-(\/) t1 t2 = Or t1 t2
+(\/) t1 t2 = Op Or t1 t2
 
 (/\) :: Term -> Term -> Term
-(/\) t1 t2 = And t1 t2
+(/\) t1 t2 = Op And t1 t2
 
 (==>) :: Term -> Term -> Term
-(==>) t1 t2 = Impl t1 t2
+(==>) t1 t2 = Op Impl t1 t2
 
 (<==>) :: Term -> Term -> Term
-(<==>) t1 t2 = Iff t1 t2
+(<==>) t1 t2 = Op Iff t1 t2
 
 (!<==>) :: Term -> Term -> Term
-(!<==>) t1 t2 = Niff t1 t2
+(!<==>) t1 t2 = Op Niff t1 t2
 
 -- Precedencias y asociatividades
 
@@ -63,31 +63,10 @@ showTerm (Not t) = "!(" ++ showTerm t ++ ")"
 showTerm T = "true"
 showTerm F = "false"
 
-showTerm (Or (Var i) (Var j)) = showTerm(Var i) ++ " \\/ " ++ showTerm(Var j)
-showTerm (Or (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
-showTerm (Or t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i)
-showTerm (Or t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
-
-showTerm (And (Var i) (Var j)) = showTerm(Var i) ++ " /\\ " ++ showTerm(Var j)
-showTerm (And (Var i) t) = showTerm(Var i) ++ " /\\ (" ++ showTerm(t) ++ ")"
-showTerm (And t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " /\\ " ++ showTerm(Var i)
-showTerm (And t1 t2) = "(" ++ showTerm t1 ++ ") /\\ (" ++ showTerm t2 ++ ")"
-
-showTerm (Impl (Var i) (Var j)) = showTerm(Var i) ++ " ==> " ++ showTerm(Var j)
-showTerm (Impl (Var i) t) = showTerm(Var i) ++ " ==> (" ++ showTerm(t) ++ ")"
-showTerm (Impl t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " ==> " ++ showTerm(Var i)
-showTerm (Impl t1 t2) = "(" ++ showTerm t1 ++ ") ==> (" ++ showTerm t2 ++ ")"
-
-showTerm (Iff (Var i) (Var j)) = showTerm(Var i) ++ " <==> " ++ showTerm(Var j)
-showTerm (Iff (Var i) t) = showTerm(Var i) ++ " <==> (" ++ showTerm(t) ++ ")"
-showTerm (Iff t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " <==> " ++ showTerm(Var i)
-showTerm (Iff t1 t2) = "(" ++ showTerm t1 ++ ") <==> (" ++ showTerm t2 ++ ")"
-
-showTerm (Niff (Var i) (Var j)) = showTerm(Var i) ++ " !<==> " ++ showTerm(Var j)
-showTerm (Niff (Var i) t) = showTerm(Var i) ++ " !<==> (" ++ showTerm(t) ++ ")"
-showTerm (Niff t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " !<==> " ++ showTerm(Var i)
-showTerm (Niff t1 t2) = "(" ++ showTerm t1 ++ ") !<==> (" ++ showTerm t2 ++ ")"
-
+showTerm (Op operador (Var i) (Var j)) = showTerm(Var i) ++ show operador ++ showTerm(Var j)
+showTerm (Op operador (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
+showTerm (Op operador t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i)
+showTerm (Op operador t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
 
 a :: Term
 a = Var "a"
