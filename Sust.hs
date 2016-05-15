@@ -17,8 +17,7 @@ class (Show s) => Instantiable s where
     instantiate :: Equation -> s -> Equation
     instantiate (Equation t1 t2) sus = Equation (sustituir t1 sus) (sustituir t2 sus)
 
-    sustituir T _ = T
-    sustituir F _ = F
+    sustituir (Boolean b) _ = Boolean b
     sustituir (Var v1) sus = sustVar (Var v1) sus
     sustituir (Operation operador t1 t2) sus = Operation operador (sustituir t1 sus) (sustituir t2 sus)
 

@@ -1,6 +1,7 @@
 module Term where
 
 data Operator = Or | And | Impl | Iff | Niff
+data Constant = T | F
 
 instance Show Operator where
   show Or = "\\/"
@@ -9,8 +10,7 @@ instance Show Operator where
   show Iff = "<==>"
   show Niff = "!<==>"
 
-data Term = T
-          | F
+data Term = Boolean Constant
           | Var String
           | Not Term
           | Operation Operator Term Term
@@ -19,8 +19,7 @@ instance Show Term where show = showTerm
 
 instance Eq Term where
     Var t1 == Var t2 = t1 == t2
-    T == T = True
-    F == F = True
+    Boolean b1 == Boolean b2 = True
     (Operation operador1 t1 t2) == (Operation operador2 t3 t4) = (t1 == t3) && (t2 == t4)
     _ == _ = False
 
@@ -50,22 +49,26 @@ infixr 3 ==>
 infixl 4 /\
 infixl 4 \/
 
-
+-- Función que convierte los términos en su representación como string
 showTerm :: Term -> String
 
 showTerm (Var i) = i
 
 showTerm (Not (Var i)) = "!" ++ showTerm t
-showTerm (Not T) = "!" ++ showTerm T
-showTerm (Not F) = "!" ++ showTerm F
+showTerm (Not (Boolean b)) = "!" ++ showTerm (Boolean b)
 showTerm (Not t) = "!(" ++ showTerm t ++ ")"
 
-showTerm T = "true"
-showTerm F = "false"
+showTerm (Boolean T) = "true"
+showTerm (Boolean F) = "false"
 
 showTerm (Operation operador (Var i) (Var j)) = showTerm(Var i) ++ " " ++ show operador ++ " " ++ showTerm(Var j)
+showTerm (Operation operador (Var i) (Boolean b)) = showTerm(Var i) ++ " " ++ show operador ++ " " ++ showTerm(Boolean b)
+showTerm (Operation operador (Boolean b) (Var i)) = showTerm(Boolean b) ++ " " ++ show operador ++ " " ++ showTerm(Var i)
+showTerm (Operation operador (Boolean b1) (Boolean b2)) = showTerm(Boolean b1) ++ " " ++ show operador ++ " " ++ showTerm(Boolean b2)
 showTerm (Operation operador (Var i) t) = showTerm(Var i) ++ " " ++ show operador ++ " (" ++ showTerm(t) ++ ")"
-showTerm (Operation operador t (Var i)) = "(" ++ showTerm(t) ++ ") " ++ show operador ++ " (" showTerm(Var i)
+showTerm (Operation operador t (Var i)) = "(" ++ showTerm(t) ++ ") " ++ show operador ++ " " ++ showTerm(Var i)
+showTerm (Operation operador (Boolean b) t) = showTerm(Boolean b) ++ " " ++ show operador ++ " (" ++ showTerm(t) ++ ")"
+showTerm (Operation operador t (Boolean b)) = "(" ++ showTerm(t) ++ ") " ++ show operador ++ " " ++ showTerm(Boolean b)
 showTerm (Operation operador t1 t2) = "(" ++ showTerm t1 ++ ") "++ show operador ++" (" ++ showTerm t2 ++ ")"
 
 a :: Term
@@ -147,7 +150,7 @@ z :: Term
 z = Var "z"
 
 true :: Term
-true = T
+true = Boolean T
 
 false :: Term
-false = F
+false = Boolean F
