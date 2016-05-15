@@ -1,4 +1,15 @@
-module Asistente_pruebas (statement, with, using, lambda, proof, done) where
+module Asistente_pruebas (
+    module Term,
+    module Equation,
+    module Sust,
+    module Theorems,
+    statement,
+    with,
+    using,
+    lambda,
+    proof,
+    done
+) where
 
 import Term
 import Equation 

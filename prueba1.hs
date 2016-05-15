@@ -1,9 +1,4 @@
 import Asistente_pruebas
-import Term
-import Equation
-import Sust 
-import Theorems
-
 
 verify1 = let theorem = (p <==> q) <==> q === p in
          proof theorem
