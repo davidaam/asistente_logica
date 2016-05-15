@@ -20,7 +20,7 @@ class (Show s) => Instantiable s where
     sustituir T _ = T
     sustituir F _ = F
     sustituir (Var v1) sus = sustVar (Var v1) sus
-    sustituir (Op operador t1 t2) sus = Op operador (sustituir t1 sus) (sustituir t2 sus)
+    sustituir (Operation operador t1 t2) sus = Operation operador (sustituir t1 sus) (sustituir t2 sus)
 
 
 instance Instantiable Sust where

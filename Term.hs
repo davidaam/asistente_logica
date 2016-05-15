@@ -1,8 +1,8 @@
 module Term where
 
-data OpBin = Or | And | Impl | Iff | Niff
+data Operator = Or | And | Impl | Iff | Niff
 
-instance Show OpBin where
+instance Show Operator where
   show Or = "\\/"
   show And = "/\\"
   show Impl = "==>"
@@ -13,7 +13,7 @@ data Term = T
           | F
           | Var String
           | Not Term
-          | Op OpBin Term Term
+          | Operation Operator Term Term
 
 instance Show Term where show = showTerm
 
@@ -21,26 +21,26 @@ instance Eq Term where
     Var t1 == Var t2 = t1 == t2
     T == T = True
     F == F = True
-    (Op operador1 t1 t2) == (Op operador2 t3 t4) = (t1 == t3) && (t2 == t4)
+    (Operation operador1 t1 t2) == (Operation operador2 t3 t4) = (t1 == t3) && (t2 == t4)
     _ == _ = False
 
 neg :: Term -> Term
 neg t = Not t
 
 (\/) :: Term -> Term -> Term
-(\/) t1 t2 = Op Or t1 t2
+(\/) t1 t2 = Operation Or t1 t2
 
 (/\) :: Term -> Term -> Term
-(/\) t1 t2 = Op And t1 t2
+(/\) t1 t2 = Operation And t1 t2
 
 (==>) :: Term -> Term -> Term
-(==>) t1 t2 = Op Impl t1 t2
+(==>) t1 t2 = Operation Impl t1 t2
 
 (<==>) :: Term -> Term -> Term
-(<==>) t1 t2 = Op Iff t1 t2
+(<==>) t1 t2 = Operation Iff t1 t2
 
 (!<==>) :: Term -> Term -> Term
-(!<==>) t1 t2 = Op Niff t1 t2
+(!<==>) t1 t2 = Operation Niff t1 t2
 
 -- Precedencias y asociatividades
 
@@ -63,10 +63,10 @@ showTerm (Not t) = "!(" ++ showTerm t ++ ")"
 showTerm T = "true"
 showTerm F = "false"
 
-showTerm (Op operador (Var i) (Var j)) = showTerm(Var i) ++ show operador ++ showTerm(Var j)
-showTerm (Op operador (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
-showTerm (Op operador t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i)
-showTerm (Op operador t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
+showTerm (Operation operador (Var i) (Var j)) = showTerm(Var i) ++ show operador ++ showTerm(Var j)
+showTerm (Operation operador (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
+showTerm (Operation operador t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i)
+showTerm (Operation operador t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
 
 a :: Term
 a = Var "a"
