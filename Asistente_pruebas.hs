@@ -2,8 +2,8 @@ module Asistente_pruebas (statement, with, using, lambda, proof, done) where
 
 import Term
 import Equation 
-import Theorems
 import Sust
+import Theorems
 
 leibniz :: Equation -> Term -> Term -> Equation
 leibniz (Equation e1 e2) tz (Var z) = Equation (sustituir tz (Sust e1 (Var z))) (sustituir tz (Sust e2 (Var z))) 
