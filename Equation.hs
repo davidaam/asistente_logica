@@ -1,4 +1,8 @@
-module Equation where
+module Equation (
+	module Equation,
+	module Term
+) where
+
 import Term
 
 -- Precedencia y asociatividad de la equivalencia

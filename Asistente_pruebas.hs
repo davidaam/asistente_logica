@@ -1,18 +1,9 @@
 module Asistente_pruebas (
-    module Term,
-    module Equation,
+    module Asistente_pruebas,
     module Sust,
-    module Theorems,
-    statement,
-    with,
-    using,
-    lambda,
-    proof,
-    done
+    module Theorems
 ) where
 
-import Term
-import Equation 
 import Sust
 import Theorems
 

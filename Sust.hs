@@ -1,7 +1,9 @@
 {-# LANGUAGE FlexibleInstances #-}
-module Sust where
+module Sust (
+    module Sust,
+    module Equation
+) where
 
-import Term
 import Equation
 -- Asumimos que la entrada es correcta
 data Sust = Sust Term Term
