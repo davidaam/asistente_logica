@@ -63,10 +63,10 @@ showTerm (Not t) = "!(" ++ showTerm t ++ ")"
 showTerm T = "true"
 showTerm F = "false"
 
-showTerm (Operation operador (Var i) (Var j)) = showTerm(Var i) ++ show operador ++ showTerm(Var j)
-showTerm (Operation operador (Var i) t) = showTerm(Var i) ++ " \\/ (" ++ showTerm(t) ++ ")"
-showTerm (Operation operador t (Var i)) = "(" ++ showTerm(t) ++ ")" ++ " \\/ " ++ showTerm(Var i)
-showTerm (Operation operador t1 t2) = "(" ++ showTerm t1 ++ ") \\/ (" ++ showTerm t2 ++ ")"
+showTerm (Operation operador (Var i) (Var j)) = showTerm(Var i) ++ " " ++ show operador ++ " " ++ showTerm(Var j)
+showTerm (Operation operador (Var i) t) = showTerm(Var i) ++ " " ++ show operador ++ " (" ++ showTerm(t) ++ ")"
+showTerm (Operation operador t (Var i)) = "(" ++ showTerm(t) ++ ") " ++ show operador ++ " (" showTerm(Var i)
+showTerm (Operation operador t1 t2) = "(" ++ showTerm t1 ++ ") "++ show operador ++" (" ++ showTerm t2 ++ ")"
 
 a :: Term
 a = Var "a"
