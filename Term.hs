@@ -11,7 +11,7 @@ instance Show Operator where
   show Niff = "!<==>"
 
 data Term = Boolean Constant
-          | Var String
+          | Var Char
           | Not Term
           | Operation Operator Term Term
 
@@ -52,7 +52,7 @@ infixl 4 \/
 -- Función que convierte los términos en su representación como string
 showTerm :: Term -> String
 
-showTerm (Var i) = i
+showTerm (Var i) = [i]
 
 showTerm (Not (Var i)) = "!" ++ showTerm t
 showTerm (Not (Boolean b)) = "!" ++ showTerm (Boolean b)
@@ -71,86 +71,87 @@ showTerm (Operation operador (Boolean b) t) = showTerm(Boolean b) ++ " " ++ show
 showTerm (Operation operador t (Boolean b)) = "(" ++ showTerm(t) ++ ") " ++ show operador ++ " " ++ showTerm(Boolean b)
 showTerm (Operation operador t1 t2) = "(" ++ showTerm t1 ++ ") "++ show operador ++" (" ++ showTerm t2 ++ ")"
 
-a :: Term
-a = Var "a"
-
-b :: Term
-b = Var "b"
-
-c :: Term
-c = Var "c"
-
-d :: Term
-d = Var "d"
-
-e :: Term
-e = Var "e"
-
-f :: Term
-f = Var "f"
-
-g :: Term
-g = Var "g"
-
-h :: Term
-h = Var "h"
-
-i :: Term
-i = Var "i"
-
-j :: Term
-j = Var "j"
-
-k :: Term
-k = Var "k"
-
-l :: Term
-l = Var "l"
-
-m :: Term
-m = Var "m"
-
-n :: Term
-n = Var "n"
-
-o :: Term
-o = Var "o"
-
-p :: Term
-p = Var "p"
-
-q :: Term
-q = Var "q"
-
-r :: Term
-r = Var "r"
-
-s :: Term
-s = Var "s"
-
-t :: Term
-t = Var "t"
-
-u :: Term
-u = Var "u"
-
-v :: Term
-v = Var "v"
-
-w :: Term
-w = Var "w"
-
-x :: Term
-x = Var "x"
-
-y :: Term
-y = Var "y"
-
-z :: Term
-z = Var "z"
 
 true :: Term
 true = Boolean T
 
 false :: Term
 false = Boolean F
+
+a :: Term
+a = Var 'a'
+
+b :: Term
+b = Var 'b'
+
+c :: Term
+c = Var 'c'
+
+d :: Term
+d = Var 'd'
+
+e :: Term
+e = Var 'e'
+
+f :: Term
+f = Var 'f'
+
+g :: Term
+g = Var 'g'
+
+h :: Term
+h = Var 'h'
+
+i :: Term
+i = Var 'i'
+
+j :: Term
+j = Var 'j'
+
+k :: Term
+k = Var 'k'
+
+l :: Term
+l = Var 'l'
+
+m :: Term
+m = Var 'm'
+
+n :: Term
+n = Var 'n'
+
+o :: Term
+o = Var 'o'
+
+p :: Term
+p = Var 'p'
+
+q :: Term
+q = Var 'q'
+
+r :: Term
+r = Var 'r'
+
+s :: Term
+s = Var 's'
+
+t :: Term
+t = Var 't'
+
+u :: Term
+u = Var 'u'
+
+v :: Term
+v = Var 'v'
+
+w :: Term
+w = Var 'w'
+
+x :: Term
+x = Var 'x'
+
+y :: Term
+y = Var 'y'
+
+z :: Term
+z = Var 'z'

@@ -43,4 +43,4 @@ instance Instantiable (Term, Term, Sust, Term, Term) where
         | otherwise = Var v1
 
 instance Show Sust where
-    show (Sust t (Var z)) = show t ++ "=:" ++ z
+    show (Sust t (Var z)) = show t ++ "=:" ++ show (Var z) 
